@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 function LoginPage() {
   const [email,setEmail]=useState('')
   const [password,setPassword]=useState('')
-  const async handleLoginSubmit=(e)=>{
+  const handleLoginSubmit=async (e)=>{
     e.preventDefault();
     try {
       await axios.post("/login",{email,password});

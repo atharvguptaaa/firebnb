@@ -16,7 +16,7 @@ app.use(cors({
     origin:"http://localhost:5173"
     
 }))
-console.log(process.env.MONGODB_URL);
+// console.log(process.env.MONGODB_URL);
 
 mongoose.connect(process.env.MONGODB_URL)
 
@@ -40,7 +40,24 @@ app.post("/register", async (req,res)=>{
         res.json(userDoc)
     } catch (error) {
         res.status(422).json(error)
-    }
-   
+    }  
 })
+
+app.post("/login",async (req,res)=>{
+    const {email,password}=req.body;
+    const userDoc= await User.findOne({email})
+    if(userDoc){
+        const passOk=bcrypt.compareSync(password,userDoc.password)
+        if(passOk){
+            res.json("pass ok")
+        }
+        else{
+            res.json("wrong passwd")
+        }
+    }
+    else{
+        res.json("not found")
+    }
+}) 
+
 app.listen(4000)
