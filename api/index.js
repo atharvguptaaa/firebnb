@@ -84,9 +84,10 @@ app.post("/login",async (req,res)=>{
 app.get("/profile",(req,res)=>{
     const {token}=req.cookies;
     if(token){
-        jwt.verify(token,jwtSecret,{},(err,cookieData)=>{
+        jwt.verify(token,jwtSecret,{}, async(err,cookieData)=>{
             if(err)throw err
-            res.json(cookieData)
+            const {name,email,_id}= await User.findById(cookieData.id)
+            res.json({name,email,_id})
         })
     }
     else{
