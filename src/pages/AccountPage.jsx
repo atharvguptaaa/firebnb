@@ -7,6 +7,9 @@ function AccountPage() {
     if(ready && !user ){
         return <Navigate to={'/login'}/>
     }
+    if(!ready){
+      return 'Loading...'
+    }
   return (
     <>
     <div>User is 
