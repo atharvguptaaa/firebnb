@@ -5,8 +5,11 @@ const { default: mongoose } = require("mongoose")
 const User = require("./models/User")
 require("dotenv").config()
 const bcrypt = require('bcrypt');
+const jwt=require('jsonwebtoken');
 
 const bcryptSalt = bcrypt.genSaltSync(10);
+
+const jwtSecret="dfsdbkfsdjksdjfu3rej"
 
 
 app.use(express.json())
@@ -17,8 +20,16 @@ app.use(cors({
     
 }))
 // console.log(process.env.MONGODB_URL);
-
-mongoose.connect(process.env.MONGODB_URL)
+const connnectDB=async()=>{
+    try {
+ 
+        await mongoose.connect(process.env.MONGODB_URL)
+    } catch (error) {
+        console.log(`Unable to connect to the Mongo db  ${error} `);
+    }
+    
+}
+connnectDB();
 
 
 app.get("/test",(req,res)=>{
@@ -49,13 +60,21 @@ app.post("/login",async (req,res)=>{
     if(userDoc){
         const passOk=bcrypt.compareSync(password,userDoc.password)
         if(passOk){
-            res.json("pass ok")
+            // we want to respond with a cookie and an encrypted username 
+            jwt.sign({email:userDoc.email, id:userDoc._id},jwtSecret,{}, (err,token)=>{
+                if(err) throw err;
+                res.cookie("token",token).json(userDoc)
+            })
+             
         }
         else{
+            throw new Error("wrong password");
             res.json("wrong passwd")
         }
     }
     else{
+        throw new Error("not found.");
+        
         res.json("not found")
     }
 }) 
