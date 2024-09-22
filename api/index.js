@@ -71,7 +71,7 @@ app.post("/login",async (req,res)=>{
         }
         else{
             throw new Error("wrong password");
-            res.json("wrong passwd")
+            res.json("wrong passwd");
         }
     }
     else{
