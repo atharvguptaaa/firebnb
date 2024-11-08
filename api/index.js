@@ -7,6 +7,8 @@ const cookieParser=require("cookie-parser")
 require("dotenv").config()
 const bcrypt = require('bcrypt');
 const jwt=require('jsonwebtoken');
+const imageDownloader =require('image-downloader')
+const multer=require('multer');
 
 const bcryptSalt = bcrypt.genSaltSync(10);
 
@@ -15,6 +17,7 @@ const jwtSecret="dfsdbkfsdjksdjfu3rej"
 
 app.use(express.json())
 app.use(cookieParser())
+app.use('/uploads',express.static(__dirname+'/uploads'))
 
 app.use(cors({
     credentials:true,
@@ -43,7 +46,7 @@ app.get("/test",(req,res)=>{
 
 
 app.post("/register", async (req,res)=>{
-    const {name,email,password}=req.body
+    const {name,email,password}=req.body;
     try {
         const userDoc= await User.create({
             name,
@@ -100,4 +103,21 @@ app.get("/logout",(req,res)=>{
     res.cookie("token","").json("true")
 })
 
+app.post("/upload-by-link",async (req,res)=>{
+    const {link}= req.body;
+    const newName='photo'+Date.now()+'.jpg';
+    await imageDownloader.image({
+        url:link,
+        dest:__dirname+'/uploads/'+newName,
+    })
+
+    res.json(newName);
+})
+
+const photosMiddleware=multer({dest:'uploads/'});
+app.post('/upload',photosMiddleware.array('photos',100),(req,res)=>{
+    res.json(req.files);
+})
+
 app.listen(4000)
+
