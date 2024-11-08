@@ -2,7 +2,6 @@ import { Link, useParams } from "react-router-dom";
 import { useState } from "react";
 import Perks from "../Perks";
 import axios from "axios";
-import { response } from "express";
 export default function PlacesPage() {
   const [title, setTitle] = useState("");
   const [address, setAddress] = useState("");
