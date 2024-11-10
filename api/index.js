@@ -115,6 +115,7 @@ app.post("/upload-by-link",async (req,res)=>{
 })
 
 const photosMiddleware=multer({dest:'uploads/'});
+
 app.post('/upload',photosMiddleware.array('photos',100),(req,res)=>{
     res.json(req.files);
 })
