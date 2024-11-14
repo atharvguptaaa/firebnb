@@ -12,7 +12,7 @@ function RegisterPage() {
             { name,
               email,
               password});
-              alert("Registration successful")
+          alert("Registration successful")
         } catch (error) {
           alert("Registration failed")
         }

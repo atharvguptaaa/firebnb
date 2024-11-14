@@ -9,6 +9,7 @@ const bcrypt = require('bcrypt');
 const jwt=require('jsonwebtoken');
 const imageDownloader =require('image-downloader')
 const multer=require('multer');
+const fs=require('fs');
 
 const bcryptSalt = bcrypt.genSaltSync(10);
 
@@ -117,7 +118,17 @@ app.post("/upload-by-link",async (req,res)=>{
 const photosMiddleware=multer({dest:'uploads/'});
 
 app.post('/upload',photosMiddleware.array('photos',100),(req,res)=>{
-    res.json(req.files);
+    const uploadedFiles=[];
+    for(let i=0;i<req.files.length;i++){
+        const {path,originalname}=req.files[i];
+        const parts=originalname.split('.');
+        const ext=parts[parts.length-1];
+        const newPath=path+'.'+ext;
+        fs.renameSync(path,newPath);
+        uploadedFiles.push(newPath.replace("uploads\\",""));
+
+    }
+    res.json(uploadedFiles);
 })
 
 app.listen(4000)

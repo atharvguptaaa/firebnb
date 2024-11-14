@@ -47,18 +47,19 @@ export default function PlacesPage() {
     for(let i=0;i<files.length;i++){
         data.append('photos',files[i]);
     }
-    axios.post('/upload',data,{
+    // console.log("data "+data);
+        axios.post('/upload',data,{
         headers:{'Content-type':'multipart/form-data'}
     }).then(response=>{
-        const {data:filename}=response;
+        const {data:filenames}=response;
         setAddedPhotos(prev=>{
-            return [...prev,filename]
+            return [...prev,...filenames];
         })
     })
   }
 
   const { action } = useParams();
-  console.log(action);
+  //console.log(action);
 
   return (
     <div>
