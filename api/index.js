@@ -3,6 +3,7 @@ const app=express()
 const cors=require("cors")
 const { default: mongoose } = require("mongoose")
 const User = require("./models/User")
+import PlaceModel from "./models/Place"
 const cookieParser=require("cookie-parser")
 require("dotenv").config()
 const bcrypt = require('bcrypt');
@@ -130,6 +131,22 @@ app.post('/upload',photosMiddleware.array('photos',100),(req,res)=>{
     }
     res.json(uploadedFiles);
 })
+
+app.post('/places',(req,res)=>{
+    const {token}=req.cookies;
+    const {title,address,addedPhotos,description,perks,extraInfo,checkIn,checkOut,maxGuests}=req.body;
+    if(token){
+        jwt.verify(token,jwtSecret,{}, async(err,cookieData)=>{
+            if(err)throw err;
+            const placeDoc=await PlaceModel.create({
+                owner:cookieData.id,
+                title,address,addedPhotos,description,perks,extraInfo,checkIn,checkOut,maxGuests
+            });
+            res.json(placeDoc);
+        });
+            }
+})
+
 
 app.listen(4000)
 

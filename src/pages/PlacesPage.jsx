@@ -1,18 +1,20 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, Navigate, useParams } from "react-router-dom";
 import { useState } from "react";
 import Perks from "../Perks";
 import axios from "axios";
+import PhotoUploader from "../PhotosUploader";
 export default function PlacesPage() {
   const [title, setTitle] = useState("");
   const [address, setAddress] = useState("");
   const [addedPhotos, setAddedPhotos] = useState("");
-  const [photoLink, setPhotoLink] = useState("");
   const [description, setDescription] = useState("");
   const [perks, setPerks] = useState("");
   const [extraInfo, setExtraInfo] = useState("");
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
   const [maxGuests, setMaxGuests] = useState(1);
+
+  const [redirect,setRedirect]=useState("");
 
   function inputHeader(text) {
     return <h2 className="text-2xl mt-4">{text}</h2>;
@@ -30,36 +32,19 @@ export default function PlacesPage() {
       </>
     );
   }
-  
-  async function addPhotoByLink(e){
-    e.preventDefault();
-    const {data:filename}=await axios.post("/upload-by-link",{link:photoLink});
-    setAddedPhotos(prev=>{
-        return [...prev,filename]
-    })
-    setPhotoLink('');
-  }
-
-  function uploadPhoto(e){
-    e.preventDefault();
-    const files =e.target.files;
-    const data=new FormData();
-    for(let i=0;i<files.length;i++){
-        data.append('photos',files[i]);
-    }
-    // console.log("data "+data);
-        axios.post('/upload',data,{
-        headers:{'Content-type':'multipart/form-data'}
-    }).then(response=>{
-        const {data:filenames}=response;
-        setAddedPhotos(prev=>{
-            return [...prev,...filenames];
-        })
-    })
-  }
 
   const { action } = useParams();
-  //console.log(action);
+
+ async function addNewPlace(e){
+    e.preventDefault();
+    await axios.post('/places',{title,address,addedPhotos,description,perks,extraInfo,checkIn,checkOut,maxGuests});
+    setRedirect('/account/places')
+  }
+  
+  if(redirect){
+    return <Navigate to={redirect}/>
+  }
+
 
   return (
     <div>
@@ -73,13 +58,13 @@ export default function PlacesPage() {
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
-              stroke-width="1.5"
+              strokeWidth="1.5"
               stroke="currentColor"
-              class="size-6"
+              className="size-6"
             >
               <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 d="M12 4.5v15m7.5-7.5h-15"
               />
             </svg>
@@ -90,7 +75,7 @@ export default function PlacesPage() {
 
       {action === "new" && (
         <div>
-          <form>
+          <form onSubmit={addNewPlace}>
             {preInput(
               "Title",
               "title for your place, should be short and catchy"
@@ -111,31 +96,8 @@ export default function PlacesPage() {
             />
 
             {preInput("Photos", "more=better")}
-            <div className="flex gap-2">
-              <input
-                type="text"
-                value={photoLink}
-                onChange={(e) => setPhotoLink(e.target.value)}
-                placeholder="Add using a link .....jpg"
-              />
-              <button className="bg-gray-200 px-4  rounded-2xl" onClick={addPhotoByLink}>
-                Add&nbsp;Photo
-              </button>
-            </div>
-            <div className="mt-2 grid gap-2 grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-
-    {addedPhotos.length > 0 && addedPhotos.map(link => (
-        <div key={link}>
-            <img className="rounded-2xl" src={`http://localhost:4000/uploads/${link}`} alt="" />
-        </div>
-    ))}
-    <label
-     className="flex justify-center border items-center bg-transparent rounded-2xl p-2 text-2xl text-gray-600 cursor-pointer">
-        <input type="file" multiple className="hidden" onChange={uploadPhoto} />
-        +
-    </label>
-</div>
-
+            
+            <PhotoUploader addedPhotos={addedPhotos} onChange={setAddedPhotos}/>
 
             {preInput("Description", "complete description of the place")}
             <textarea
