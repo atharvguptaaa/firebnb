@@ -3,7 +3,7 @@ const app=express()
 const cors=require("cors")
 const { default: mongoose } = require("mongoose")
 const User = require("./models/User")
-import PlaceModel from "./models/Place"
+const PlaceModel=require("./models/Place.js")
 const cookieParser=require("cookie-parser")
 require("dotenv").config()
 const bcrypt = require('bcrypt');
@@ -89,9 +89,9 @@ app.post("/login",async (req,res)=>{
 app.get("/profile",(req,res)=>{
     const {token}=req.cookies;
     if(token){
-        jwt.verify(token,jwtSecret,{}, async(err,cookieData)=>{
+        jwt.verify(token,jwtSecret,{}, async(err,userData)=>{
             if(err)throw err
-            const {name,email,_id}= await User.findById(cookieData.id)
+            const {name,email,_id}= await User.findById(userData.id)
             res.json({name,email,_id})
         })
     }
@@ -136,15 +136,28 @@ app.post('/places',(req,res)=>{
     const {token}=req.cookies;
     const {title,address,addedPhotos,description,perks,extraInfo,checkIn,checkOut,maxGuests}=req.body;
     if(token){
-        jwt.verify(token,jwtSecret,{}, async(err,cookieData)=>{
+        jwt.verify(token,jwtSecret,{}, async(err,userData)=>{
             if(err)throw err;
             const placeDoc=await PlaceModel.create({
-                owner:cookieData.id,
-                title,address,addedPhotos,description,perks,extraInfo,checkIn,checkOut,maxGuests
+                owner:userData.id,
+                title,address,photos:addedPhotos,description,perks,extraInfo,checkIn,checkOut,maxGuests
             });
             res.json(placeDoc);
         });
             }
+})
+
+app.get('/places',(req,res)=>{
+    const {token}=req.cookies;
+    if(token){
+    jwt.verify(token,jwtSecret,{}, async(err,userData)=>{
+        if(err)throw err;
+        const {id}=userData;
+        console.log(userData);
+        res.json(await PlaceModel.find({owner:id}))
+    })
+
+}
 })
 
 

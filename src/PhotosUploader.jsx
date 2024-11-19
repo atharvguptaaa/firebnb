@@ -7,11 +7,18 @@ export default function PhotoUploader({addedPhotos,onChange}){
 
     async function addPhotoByLink(e){
         e.preventDefault();
-        const {data:filename}=await axios.post("/upload-by-link",{link:photoLink});
-        onChange(prev=>{
-            return [...prev,filename]
-        })
-        setPhotoLink('');
+        try{
+          const {data:filename}=await axios.post("/upload-by-link",{link:photoLink});
+          onChange(prev=>{
+              return [...prev,filename]
+          })
+          setPhotoLink('');
+        }
+        catch(error){
+          console.error("Error uploading photo:", error);
+          alert("Failed to upload the photo. Please try again.");
+        }
+        
       }
     
       function uploadPhoto(e){

@@ -2,6 +2,7 @@ import axios from 'axios'
 import React,{useState} from 'react'
 import { Link } from 'react-router-dom'
 function RegisterPage() {
+  
     const [name,setName]=useState('')
     const [email,setEmail]=useState('')
     const [password,setPassword]=useState('')
