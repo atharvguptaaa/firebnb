@@ -173,7 +173,7 @@ app.post("/places", (req, res) => {
   }
 });
 
-app.get("/places", (req, res) => {
+app.get("/user-places", (req, res) => {
   const { token } = req.cookies;
   if (token) {
     jwt.verify(token, jwtSecret, {}, async (err, userData) => {
@@ -239,5 +239,9 @@ app.put("/places", async (req, res) => {
     });
   }
 });
+
+app.get('/places', async (req,res)=>{
+    res.json(await PlaceModel.find())
+})
 
 app.listen(4000);
