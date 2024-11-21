@@ -43,7 +43,7 @@ useEffect(()=>{
             <Link to={'/account/places/'+place._id} className="flex cursor-pointer gap-4 bg-gray-100 p-4 rounded-2xl">
               <div className="flex w-32 h-32 bg-gray-300 grow-0 shrink-0">
                 {place.photos.length>0 &&(
-                  <img className="object-cover" src={"http://localhost:4000/uploads/"+place.photos[0]} alt="" />
+                  <img className="object-cover grow shrink-0" src={"http://localhost:4000/uploads/"+place.photos[0]} alt="" />
                 )}
               </div>
               <div className="shrink grow-0">

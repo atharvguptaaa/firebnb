@@ -19,6 +19,7 @@ export default function PlacesFormPage(){
     const [checkOut, setCheckOut] = useState("");
     const [maxGuests, setMaxGuests] = useState(1);
     const [redirect, setRedirect] = useState(false);
+    const [price, setPrice] = useState(0);
 
     useEffect(()=>{
         if(!id){
@@ -35,6 +36,7 @@ export default function PlacesFormPage(){
             setCheckIn(data.checkIn)
             setCheckOut(data.checkOut)
             setMaxGuests(data.maxGuests)
+            setPrice(data.price)
             
         })
     },[id])
@@ -59,7 +61,7 @@ export default function PlacesFormPage(){
 
       async function savePlace(e){
         e.preventDefault();
-        const placeData={title,address,addedPhotos,description,perks,extraInfo,checkIn,checkOut,maxGuests}
+        const placeData={title,address,addedPhotos,description,perks,extraInfo,checkIn,checkOut,maxGuests,price}
         if(id){
             await axios.put('/places',{id,...placeData});
         
@@ -155,6 +157,22 @@ export default function PlacesFormPage(){
                 />
               </div>
             </div>
+
+            {preInput(
+              "Price Per Night",
+              "In Indian Rupees(INR)"
+            )}
+            <div className="gap-2 ">
+              <div>
+                <input
+                  type="number" placeholder="5000"
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
+                />
+              </div>
+            
+            </div>
+
             <button className="primary my-4">Save</button>
           </form>
         </div>
