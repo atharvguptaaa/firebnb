@@ -277,7 +277,7 @@ app.get('/bookings', async (req,res)=>{
    res.json(await BookingModel.find({user:userData.id}).populate('place'));
   })
 
-const bookingz = BookingModel.findOne({ _id: "674abd319d03ebaee042ce09" })  
-console.log(bookingz);
+// const booking = BookingModel.findOne({ _id: "674abd319d03ebaee042ce09" })  
+// console.log(booking);
 
 app.listen(4000);
