@@ -11,6 +11,7 @@ const jwt = require("jsonwebtoken");
 const imageDownloader = require("image-downloader");
 const multer = require("multer");
 const fs = require("fs");
+const BookingModel = require("./models/Booking.js");
 
 const bcryptSalt = bcrypt.genSaltSync(10);
 
@@ -35,6 +36,17 @@ const connnectDB = async () => {
   }
 };
 connnectDB();
+
+
+function getUserDataFromReq(req){
+  return new Promise((resolve,reject)=>{
+    jwt.verify(req.cookies.token, jwtSecret, {}, async (err, userData) => {
+      if(err) throw err;
+      resolve(userData);
+  })
+})}
+
+
 
 app.get("/test", (req, res) => {
   res.json({
@@ -247,5 +259,25 @@ app.put("/places", async (req, res) => {
 app.get('/places', async (req,res)=>{
     res.json(await PlaceModel.find())
 })
+
+app.post('/bookings', async (req,res)=>{
+  const userData=await getUserDataFromReq(req);
+const {place,checkIn,checkOut,name,phone,guests,price}=req.body;
+ BookingModel.create({place,user:userData.id,checkIn,checkOut,name,phone,guests,price}).then((doc)=>{
+  res.json(doc)
+ }).catch(err=>{
+  throw err;
+ })
+})
+
+
+
+app.get('/bookings', async (req,res)=>{
+   const userData=await getUserDataFromReq(req);
+   res.json(await BookingModel.find({user:userData.id}).populate('place'));
+  })
+
+const bookingz = BookingModel.findOne({ _id: "674abd319d03ebaee042ce09" })  
+console.log(bookingz);
 
 app.listen(4000);
