@@ -17,6 +17,7 @@ const bcryptSalt = bcrypt.genSaltSync(10);
 
 const jwtSecret = "dfsdbkfsdjksdjfu3rej";
 
+mongoose.set('debug', true);
 app.use(express.json());
 app.use(cookieParser());
 app.use("/uploads", express.static(__dirname + "/uploads"));
@@ -272,10 +273,19 @@ const {place,checkIn,checkOut,name,phone,guests,price}=req.body;
 
 
 
-app.get('/bookings', async (req,res)=>{
-   const userData=await getUserDataFromReq(req);
-   res.json(await BookingModel.find({user:userData.id}).populate('place'));
-  })
+app.get('/bookings', async (req, res) => {
+  try {
+    const userData = await getUserDataFromReq(req);
+
+    const bookings = await BookingModel.find({ user: userData.id }).populate("place").exec();
+
+      
+    res.json(bookings);
+  } catch (error) {
+    console.error('Error in /bookings:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 // const booking = BookingModel.findOne({ _id: "674abd319d03ebaee042ce09" })  
 // console.log(booking);
