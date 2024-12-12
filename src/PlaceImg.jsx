@@ -10,7 +10,7 @@ function PlaceImg({place,index=0,className=null}) {
     }
   return (
  
-                  <img className={classNam} src={"http://localhost:4000/uploads/"+place.photos[index]} alt="" />
+                  <img className={className} src={"http://localhost:4000/uploads/"+place.photos[index]} alt="" />
 
 
   )

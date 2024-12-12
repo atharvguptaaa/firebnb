@@ -278,8 +278,7 @@ app.get('/bookings', async (req, res) => {
     const userData = await getUserDataFromReq(req);
 
     const bookings = await BookingModel.find({ user: userData.id }).populate("place").exec();
-
-      
+ 
     res.json(bookings);
   } catch (error) {
     console.error('Error in /bookings:', error);
@@ -287,7 +286,5 @@ app.get('/bookings', async (req, res) => {
   }
 });
 
-// const booking = BookingModel.findOne({ _id: "674abd319d03ebaee042ce09" })  
-// console.log(booking);
 
 app.listen(4000);
