@@ -11,11 +11,13 @@ const jwt = require("jsonwebtoken");
 const imageDownloader = require("image-downloader");
 const multer = require("multer");
 const fs = require("fs");
+const BookingModel = require("./models/Booking.js");
 
 const bcryptSalt = bcrypt.genSaltSync(10);
 
 const jwtSecret = "dfsdbkfsdjksdjfu3rej";
 
+mongoose.set('debug', true);
 app.use(express.json());
 app.use(cookieParser());
 app.use("/uploads", express.static(__dirname + "/uploads"));
@@ -26,7 +28,7 @@ app.use(
     origin: "http://localhost:5173",
   })
 );
-// console.log(process.env.MONGODB_URL);
+
 const connnectDB = async () => {
   try {
     await mongoose.connect(process.env.MONGODB_URL);
@@ -35,6 +37,17 @@ const connnectDB = async () => {
   }
 };
 connnectDB();
+
+
+function getUserDataFromReq(req){
+  return new Promise((resolve,reject)=>{
+    jwt.verify(req.cookies.token, jwtSecret, {}, async (err, userData) => {
+      if(err) throw err;
+      resolve(userData);
+  })
+})}
+
+
 
 app.get("/test", (req, res) => {
   res.json({
@@ -152,6 +165,7 @@ app.post("/places", (req, res) => {
     checkIn,
     checkOut,
     maxGuests,
+    price
   } = req.body;
   if (token) {
     jwt.verify(token, jwtSecret, {}, async (err, userData) => {
@@ -167,13 +181,14 @@ app.post("/places", (req, res) => {
         checkIn,
         checkOut,
         maxGuests,
+        price
       });
       res.json(placeDoc);
     });
   }
 });
 
-app.get("/places", (req, res) => {
+app.get("/user-places", (req, res) => {
   const { token } = req.cookies;
   if (token) {
     jwt.verify(token, jwtSecret, {}, async (err, userData) => {
@@ -215,6 +230,7 @@ app.put("/places", async (req, res) => {
     checkIn,
     checkOut,
     maxGuests,
+    price
   } = req.body;
   const { token } = req.cookies;
   if (token) {
@@ -232,6 +248,7 @@ app.put("/places", async (req, res) => {
           checkIn,
           checkOut,
           maxGuests,
+          price
         });
         await placeDoc.save();
         res.json("ok");
@@ -239,5 +256,35 @@ app.put("/places", async (req, res) => {
     });
   }
 });
+
+app.get('/places', async (req,res)=>{
+    res.json(await PlaceModel.find())
+})
+
+app.post('/bookings', async (req,res)=>{
+  const userData=await getUserDataFromReq(req);
+const {place,checkIn,checkOut,name,phone,guests,price}=req.body;
+ BookingModel.create({place,user:userData.id,checkIn,checkOut,name,phone,guests,price}).then((doc)=>{
+  res.json(doc)
+ }).catch(err=>{
+  throw err;
+ })
+})
+
+
+
+app.get('/bookings', async (req, res) => {
+  try {
+    const userData = await getUserDataFromReq(req);
+
+    const bookings = await BookingModel.find({ user: userData.id }).populate("place").exec();
+ 
+    res.json(bookings);
+  } catch (error) {
+    console.error('Error in /bookings:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 
 app.listen(4000);
