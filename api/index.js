@@ -15,7 +15,7 @@ const BookingModel = require("./models/Booking.js");
 
 const bcryptSalt = bcrypt.genSaltSync(10);
 
-const jwtSecret = "dfsdbkfsdjksdjfu3rej";
+const jwtSecret = process.env.JWT_SECRET;
 
 mongoose.set('debug', true);
 app.use(express.json());

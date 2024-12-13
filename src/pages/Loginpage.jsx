@@ -35,7 +35,7 @@ function LoginPage() {
         <input type="password" placeholder='password' value={password} onChange={(e)=>setPassword(e.target.value)}/>
         <button className='primary'>Login</button>
         <div className='text-center py-2'>
-          Don&apost have an account yet? <Link to="/register"><span className='text-primary'>Register</span></Link>
+          Don&apos;t have an account yet? <Link to="/register"><span className='text-primary font-semibold'>Register</span></Link>
         </div>
       </form>
       </div>
