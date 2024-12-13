@@ -28,7 +28,7 @@ app.use(
     origin: "http://localhost:5173",
   })
 );
-// console.log(process.env.MONGODB_URL);
+
 const connnectDB = async () => {
   try {
     await mongoose.connect(process.env.MONGODB_URL);

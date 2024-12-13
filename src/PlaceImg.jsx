@@ -6,7 +6,7 @@ function PlaceImg({place,index=0,className=null}) {
         return '';
     }
     if(className==null){
-        className='object-cover grow shrink-0';
+        className='object-cover h-full w-full grow shrink-0';
     }
   return (
  
