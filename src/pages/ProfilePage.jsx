@@ -13,7 +13,6 @@ function ProfilePage() {
    if(subpage===undefined){
      subpage="profile"
    }
-  //  console.log(subpage);
 
 
     if(ready && !user ){
