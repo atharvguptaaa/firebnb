@@ -2,48 +2,45 @@
 
 ![Screenshot 2025-01-28 230723](https://github.com/user-attachments/assets/8b693751-b474-4a26-82e5-c855460ca4df)
 
-## Overview
-Firebnb is a modern and visually appealing vacation rental platform inspired by Airbnb. It provides a seamless browsing experience, allowing users to explore various listings with stunning images, descriptions, and pricing details.
-
-## Features
-- **Beautiful UI**: Modern and minimalistic design for a smooth user experience.
-- **Property Listings**: Display multiple vacation rentals with images, descriptions, and pricing.
-- **Search Functionality**: Users can filter listings based on location, dates, and guest preferences.
-- **Responsive Design**: Optimized for both desktop and mobile devices.
+Firebnb is a MERN stack project inspired by Airbnb, allowing users to browse, list, and book accommodations seamlessly.
 
 ## Technologies Used
-- **Frontend**: Angular, TypeScript, HTML, SCSS
-- **Styling**: Tailwind CSS / SCSS
-- **State Management**: NgRx (if applicable)
+- **MongoDB** - Database for storing user and listing data
+- **Express.js** - Backend framework for handling API requests
+- **React.js** - Frontend library for building the UI
+- **Node.js** - Runtime for executing JavaScript on the server
 
-## Setup Instructions
+## Features
+- User authentication & authorization
+- Listing and booking accommodations
+- Search and filter functionality
+- Responsive UI with modern design
+
+## Installation
+
 1. Clone the repository:
-   ```sh
+   ```bash
    git clone https://github.com/yourusername/firebnb.git
    cd firebnb
    ```
 2. Install dependencies:
-   ```sh
+   ```bash
    npm install
    ```
-3. Run the development server:
-   ```sh
-   ng serve
+3. Start the backend server:
+   ```bash
+   cd server
+   npm start
    ```
-4. Open the project in your browser:
-   ```
-   http://localhost:4200
+4. Start the frontend:
+   ```bash
+   cd client
+   npm start
    ```
 
-## Contribution Guidelines
-- Fork the repository and create a feature branch.
-- Commit changes with descriptive messages.
-- Submit a pull request for review.
+## Contributing
+Feel free to contribute by submitting pull requests or reporting issues.
 
 ## License
 This project is licensed under the MIT License.
-
----
-
-Feel free to update any section based on specific project details!
 
