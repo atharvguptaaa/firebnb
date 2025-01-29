@@ -29,13 +29,12 @@ Firebnb is a MERN stack project inspired by Airbnb, allowing users to browse, li
    ```
 3. Start the backend server:
    ```bash
-   cd server
-   npm start
+   cd api
+   npm index.js
    ```
 4. Start the frontend:
    ```bash
-   cd client
-   npm start
+   npm run dev   
    ```
 
 ## Contributing
