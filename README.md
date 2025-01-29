@@ -1,6 +1,7 @@
 # Firebnb
 
-![Firebnb Screenshot](./Screenshot%202025-01-28%20230723.png)
+![Firebnb Screenshot](./![Screenshot 2025-01-28 230723](https://github.com/user-attachments/assets/ea012c53-2ac9-436d-af01-64e49596fa4d)
+)
 
 ## Overview
 Firebnb is a modern and visually appealing vacation rental platform inspired by Airbnb. It provides a seamless browsing experience, allowing users to explore various listings with stunning images, descriptions, and pricing details.
